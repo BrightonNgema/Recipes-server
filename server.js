@@ -1,6 +1,8 @@
 //Imports 
 const express  = require('express');
+const jwt  = require('jsonwebtoken');
 const bodyParser =  require('body-parser');
+const cors = require('cors')
 const mongoose = require('mongoose');
 require('dotenv').config({
     path:'variables.env'
@@ -26,18 +28,39 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true })
 
 //Initializes Server Application
 const app = express();
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials:true
+}
+app.use(cors(corsOptions));
+
+//set up jwt authentication middleware
+app.use(async (req,res,next) => {
+    const token = req.headers['authorization'];
+    if(token !== "null" || null){
+        try{
+            const currentUser = jwt.verify(token, process.env.SECRET)
+            req.currentUser = currentUser
+        }catch(err){
+            console.log(err)
+        }
+    }
+    next();
+})
+
 
 //Creates GraphQL application
 app.use('/graphiql', graphiqlExpress({endpointURL :'/graphql'}))
 
 //Connects Schemas to GraphQL
-app.use('/graphql',bodyParser.json(), graphqlExpress({
+app.use('/graphql',bodyParser.json(), graphqlExpress(({currentUser}) => ({
     schema,
     context:{
         Recipe,
-        User
+        User,
+        currentUser
     }
-}))
+})))
 
 const PORT = process.env.PORT || 4444
 
