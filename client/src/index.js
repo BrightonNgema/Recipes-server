@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {Fragment}from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
@@ -9,6 +9,11 @@ import {BrowserRouter as Router , Route, Switch, Redirect} from 'react-router-do
 import ApolloClient from 'apollo-boost'
 import {ApolloProvider} from  'react-apollo';
 import withSession from './components/withSession';
+import NavBar from './components/NavBar';
+import Search from './components/Recipe/Search';
+import AddRecipe from './components/Recipe/AddRecipe';
+import Profile from './components/Profile/Profile';
+import RecipePage from './components/Recipe/RecipePage';
 
 
 const client = new ApolloClient({
@@ -31,16 +36,23 @@ const client = new ApolloClient({
     }
 })
 
-const Root = ({refetch}) =>(
+const Root = ({refetch, session}) =>(
     <Router>
+        <Fragment>
+        <NavBar session={session}/>
         <Switch>
-            <Route path="/" exact component={App} />  
+        <Route path="/" exact component={App} />  
+            <Route path="/search" exact component={Search} />  
             <Route path="/signin" 
                    render={() => <Signin refetch={refetch}/>}/>  
             <Route path="/signup"
                    render={() => <Signup refetch={refetch}/>}/>
+            <Route path="/recipe/add" exact component={AddRecipe} />
+            <Route path="/recipes/:_id" exact component={RecipePage} />
+            <Route path="/profile" exact component={Profile} />
             <Redirect to="/" />
         </Switch>
+        </Fragment>
     </Router>
 );
 
