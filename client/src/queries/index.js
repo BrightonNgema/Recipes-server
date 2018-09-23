@@ -1,9 +1,25 @@
 import {gql} from 'apollo-boost';
 
-/* Recipe Queries */
+//---------------------------------------------QUERIES-------------------------------------------------------------//
+
 export const GET_ALL_RECIPES = gql`
     query{
         getAllRecipes{
+            _id
+            name
+            description
+            instructions
+            category
+            likes
+            createdDate
+            username
+        }
+    }   
+`;
+
+export const GET_RECIPE = gql`
+    query($id :ID!){
+        getRecipe(_id:$id){
             _id
             name
             description
@@ -26,6 +42,9 @@ export const GET_CURRENT_USER = gql`
     }   
 `;
 
+
+//---------------------------------------------MUTATIONS-------------------------------------------------------------//
+
 export const SIGNIN_USER = gql `
     mutation($username:String!, $password:String!){
         signinUser(username:$username, password:$password){
@@ -41,4 +60,22 @@ export const SIGNUP_USER = gql `
         }
     }
 `; 
+
+export const ADD_RECIPE = gql`
+    mutation    addRecipe($name: String!,$category: String!, $description: String!,
+                        $instructions: String!,$username: String){
+                addRecipe(name:$name,category: $category, description: $description,
+                        instructions: $instructions,username: $username){
+                            
+                        _id
+                        name
+                        description
+                        instructions
+                        category
+                        likes
+                        createdDate
+                        username
+        }
+    }   
+`;
 
