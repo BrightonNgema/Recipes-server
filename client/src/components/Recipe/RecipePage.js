@@ -11,7 +11,6 @@ import { Query } from 'react-apollo';
                 {({data, loading, error}) => {
                 if(loading) return <div className="App">Loading</div>
                 if(error) return <div className="App">Error</div>
-                console.log(data)
                 const {name, category, description,instructions, likes, username} = data.getRecipe 
                 return (
                     <div className="App">

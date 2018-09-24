@@ -32,15 +32,42 @@ export const GET_RECIPE = gql`
     }   
 `;
 
+export const SEARCH_RECIPES = gql`
+    query($searchTerm :String){
+        searchRecipes(searchTerm:$searchTerm){
+            _id
+            name
+            description
+            instructions
+            category
+            likes
+            createdDate
+            username
+        }
+    }   
+`;
+
 export const GET_CURRENT_USER = gql`
     query{
         getCurrentUser{
             username
             joinDate
             email
+            favourites{
+                _id
+            name
+            description
+            instructions
+            category
+            likes
+            createdDate
+            username
+            }
         }
     }   
 `;
+
+
 
 
 //---------------------------------------------MUTATIONS-------------------------------------------------------------//
